@@ -9,6 +9,6 @@ if [[ "$1" = 'mf2005' ]] && [[ "$#" -eq 1 ]]; then
         gosu root mf2005 $line;
     done < <(ls *.nam /Unix/test-run -1)
 else
-    gosu root exec "$@"
+    gosu root "$@"
 fi
 
