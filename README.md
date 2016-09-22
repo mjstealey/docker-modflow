@@ -1,5 +1,7 @@
 # docker-modflow
-Docker implementation of MODFLOW-2005-v.1.11.00
+Docker implementation of [MODFLOW-2005-v.1.11.00](http://water.usgs.gov/ogw/modflow/MODFLOW.html)
+
+Based on [source code](http://water.usgs.gov/ogw/modflow/MODFLOW-2005_v1.11.00/mf2005v1_11_00_unix.zip) for Unix file structure
 
 ## Pull from dockerhub
 ```bash
@@ -8,9 +10,9 @@ docker pull mjstealey/docker-modflow
 
 ## Usage:
 
-Invoke **mf2005** execution by sharing a local volume that has your input files in it with the container. Then invoke the docker call and specify with your **.nam** file.
+Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation found within the local directory `/PATH/TO/INPUT/FILES`.
 ```bash
-docker run --rm -v /PATH/TO/INPUT/FILES:/input mjstealey/docker-modflow mf2005 FILENAME.nam 
+docker run --rm -v /PATH/TO/INPUT/FILES:/input mjstealey/docker-modflow mf2005 MYFILE.nam 
 ```
 
 Example:
