@@ -37,7 +37,7 @@ WORKDIR /input
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-VOLUME ["/input" "/output"]
+VOLUME ["/input"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["mf2005"]
