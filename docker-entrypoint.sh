@@ -7,7 +7,7 @@ if [[ "$1" = 'mf2005' ]] && [[ "$#" -eq 1 ]]; then
     while read line; do
         echo "RUN: $line"
         gosu root mf2005 $line;
-    done < <(ls *.nam /Unix/test-run -1)
+    done < <(ls /Unix/test-run | grep .nam)
 else
     gosu root "$@"
 fi
