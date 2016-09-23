@@ -26,6 +26,8 @@ RUN set -x \
     && rm mf2005v1_11_00_unix.zip
 WORKDIR /Unix/src
 RUN sed -i 's/F90= f90/F90= gfortran/g' makefile \
+    && sed -i "s!DATA ACCESS/'SEQUENTIAL'/!DATA ACCESS/'STREAM'/!g" /Unix/src/openspec.inc \
+    && sed -i "s!DATA FORM/'BINARY'/!DATA FORM/'UNFORMATTED'/!g" /Unix/src/openspec.inc \
     && make -f makefile \
     && ln -s /Unix/src/mf2005 /usr/local/bin/mf2005 \
     && apt-get purge -y --auto-remove make unzip wget
