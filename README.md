@@ -45,7 +45,7 @@ docker run --rm mjstealey/docker-modflow
 
 **Example:** This is the output that would be recieved by the user in the console if the docker-modflow container were invoked without any additional parameters.
 ```bash
-$ docker run --rm modflow
+$ docker run --rm mjstealey/docker-modflow
 
 ### RUNNING TESTS ###
 RUN: MNW2-Fig28.nam
