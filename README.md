@@ -3,21 +3,25 @@ Docker implementation of [MODFLOW-2005-v.1.11.00](http://water.usgs.gov/ogw/modf
 
 Based on [source code](http://water.usgs.gov/ogw/modflow/MODFLOW-2005_v1.11.00/mf2005v1_11_00_unix.zip) for Unix file structure
 
-## Pull from dockerhub
+## Pull the precompiled image from Docker Hub
+
+Docker Hub is a cloud hosted service from Docker that provides registry capabilities for public and private content. Collaborate effortlessly with the broader Docker community or within your team on key content, or automate your application building workflows. Learn more about [Docker](https://docs.docker.com).
+
 ```bash
 docker pull mjstealey/docker-modflow
 ```
 
 ## Usage:
 
-Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation found within the local directory `/PATH/TO/INPUT/FILES`.
+Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation. 
+This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/input` internally.
 ```bash
-docker run --rm -v /PATH/TO/INPUT/FILES:/input mjstealey/docker-modflow mf2005 MYFILE.nam 
+docker run --rm -v /LOCALPATH:/input mjstealey/docker-modflow mf2005 MYFILE.nam 
 ```
 
-Example:
+**Example:** Say we want to run a set of input files where the name file is **bcf2ss.nam** and it's located within our local directory **/mydirectory**. We can invoke the call by mapping the shared volume as `-v /mydirectory:/input` and specify the execution of MODFLOW on our **bcf2ss.nam** as `mf2005 bcf2ss.nam` in the following way:
 ```bash
-$ docker run --rm -v /LOCAL/PATH/TO/test-run:/input mjstealey/docker-modflow mf2005 bcf2ss.nam
+$ docker run --rm -v /mydirectory:/input mjstealey/docker-modflow mf2005 bcf2ss.nam
 
                                   MODFLOW-2005
     U.S. GEOLOGICAL SURVEY MODULAR FINITE-DIFFERENCE GROUND-WATER FLOW MODEL
@@ -34,12 +38,12 @@ $ docker run --rm -v /LOCAL/PATH/TO/test-run:/input mjstealey/docker-modflow mf2
   Normal termination of simulation
 ```
 
-If the container is run without any additional parameters it will run the test files found in `test-run`
+To test the validity of the model we will iterate over all **.nam** files found in the **test-run** directory If the container is run without any additional parameters.
 ```bash
 docker run --rm mjstealey/docker-modflow
 ```
 
-Example:
+**Example:** This is the output that would be recieved by the user in the console if the docker-modflow container were invoked without any additional parameters.
 ```bash
 $ docker run --rm modflow
 
