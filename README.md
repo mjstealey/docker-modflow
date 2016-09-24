@@ -5,7 +5,7 @@ Based on [source code](http://water.usgs.gov/ogw/modflow/MODFLOW-2005_v1.11.00/m
 
 ## Pull the precompiled image from Docker Hub
 
-Docker Hub is a cloud hosted service from Docker that provides registry capabilities for public and private content. Collaborate effortlessly with the broader Docker community or within your team on key content, or automate your application building workflows. Learn more about [Docker](https://docs.docker.com).
+The [docker image](https://hub.docker.com/r/mjstealey/docker-modflow/) is automatically built on commit to this repository at Docker hub. Docker Hub is a cloud hosted service from Docker that provides registry capabilities for public and private content. Learn more about [Docker](https://docs.docker.com) and [Docker Hub](https://hub.docker.com).
 
 ```bash
 docker pull mjstealey/docker-modflow
