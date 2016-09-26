@@ -14,7 +14,7 @@ docker pull mjstealey/docker-modflow
 ## Usage:
 
 Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation. 
-This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/input` internally.
+This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/input` internally. The resulting output **.lst** file will be written to the shared `/LOCALPATH` directory.
 ```bash
 docker run --rm -v /LOCALPATH:/input mjstealey/docker-modflow mf2005 MYFILE.nam 
 ```
@@ -37,6 +37,8 @@ $ docker run --rm -v /mydirectory:/input mjstealey/docker-modflow mf2005 bcf2ss.
 
   Normal termination of simulation
 ```
+Upon successful completion the user will now find the resultant **bcf2ss.lst** output file in their local **/mydirectory**.
+
 
 To test the validity of the model we will iterate over all **.nam** files found in the **test-run** directory If the container is run without any additional parameters.
 ```bash
