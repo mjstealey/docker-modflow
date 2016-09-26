@@ -38,9 +38,22 @@ $ docker run --rm -v /mydirectory:/input mjstealey/docker-modflow mf2005 bcf2ss.
   Normal termination of simulation
 ```
 Upon successful completion the user will now find the resultant **bcf2ss.lst** output file in their local **/mydirectory**.
+```bash
+$ ls /mydirectory/ -1
+bcf2ss.ba6
+bcf2ss.bc6
+bcf2ss.dis
+bcf2ss.lst <-- Our resultant output file
+bcf2ss.nam
+bcf2ss.oc
+bcf2ss.pcg
+bcf2ss.rch
+bcf2ss.riv
+bcf2ss.wel
+```
 
-
-To test the validity of the model we will iterate over all **.nam** files found in the **test-run** directory If the container is run without any additional parameters.
+**Validation of the model:**
+To test the validity of the model we will iterate over all **.nam** files found in the **test-run** directory If the container is run without any additional parameters. Samples of the expected output **.lst** files are found in the **test-out** directory and can be used for comparison as needed.
 ```bash
 docker run --rm mjstealey/docker-modflow
 ```
