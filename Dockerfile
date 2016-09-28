@@ -1,6 +1,10 @@
 FROM debian:jessie
 MAINTAINER Michael J. Stealey <stealey@renci.org>
 
+# explicitly set user/group IDs for docker worker
+RUN groupadd -r worker --gid=999 \
+    && useradd -m -g worker --uid=999 worker
+
 # Install gosu
 ENV GOSU_VERSION 1.9
 RUN set -x \
@@ -33,13 +37,15 @@ RUN sed -i 's/F90= f90/F90= gfortran/g' makefile \
     && apt-get purge -y --auto-remove make unzip wget
 
 COPY docker-entrypoint.sh /
-RUN mkdir /input
-WORKDIR /input
+RUN mkdir /workspace \
+    && chown worker:worker -R /workspace \
+    && chown worker:worker -R /Unix/test-run
+WORKDIR /workspace
 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-VOLUME ["/input"]
+VOLUME ["/workspace"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["mf2005"]

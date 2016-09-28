@@ -14,9 +14,9 @@ docker pull mjstealey/docker-modflow
 ## Usage:
 
 Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation. 
-This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/input` internally. The resulting output **.lst** file will be written to the shared `/LOCALPATH` directory.
+This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/workspace` internally. The resulting output **.lst** file will be written to the shared `/LOCALPATH` directory.
 ```bash
-docker run --rm -v /LOCALPATH:/input mjstealey/docker-modflow mf2005 MYFILE.nam 
+docker run --rm -v /LOCALPATH:/workspace mjstealey/docker-modflow mf2005 MYFILE.nam 
 ```
 
 **Example 1:** Say we want to run a set of input files where the name file is **bcf2ss.nam** and it's located within our local directory **/mydirectory**. 
@@ -33,9 +33,9 @@ bcf2ss.riv
 bcf2ss.wel
 ```
 
-We can invoke the call by mapping the shared volume as `-v /mydirectory:/input` and specify the execution of MODFLOW on our **bcf2ss.nam** as `mf2005 bcf2ss.nam` in the following way:
+We can invoke the call by mapping the shared volume as `-v /mydirectory:/workspace` and specify the execution of MODFLOW on our **bcf2ss.nam** as `mf2005 bcf2ss.nam` in the following way:
 ```bash
-$ docker run --rm -v /mydirectory:/input mjstealey/docker-modflow mf2005 bcf2ss.nam
+$ docker run --rm -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 bcf2ss.nam
 
                                   MODFLOW-2005
     U.S. GEOLOGICAL SURVEY MODULAR FINITE-DIFFERENCE GROUND-WATER FLOW MODEL
@@ -82,9 +82,9 @@ UZFtest2.sip
 UZFtest2.uzf
 UZFtest2.wel
 ```
-We can invoke the call by mapping the shared volume as `-v /mydirectory:/input` and specify the execution of MODFLOW on our **UZFtest2.nam** as `mf2005 UZFtest2.nam` in the following way:
+We can invoke the call by mapping the shared volume as `-v /mydirectory:/workspace` and specify the execution of MODFLOW on our **UZFtest2.nam** as `mf2005 UZFtest2.nam` in the following way:
 ```bash
-$ docker run --rm -v /mydirectory:/input mjstealey/docker-modflow mf2005 UZFtest2.nam
+$ docker run --rm -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 UZFtest2.nam
 
                                   MODFLOW-2005
     U.S. GEOLOGICAL SURVEY MODULAR FINITE-DIFFERENCE GROUND-WATER FLOW MODEL
