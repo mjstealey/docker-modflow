@@ -16,8 +16,16 @@ docker pull mjstealey/docker-modflow
 Invoke **mf2005 MYFILE.nam** execution where `MYFILE.nam` = name of the MODFLOW name file for the simulation. 
 This is achieved by sharing your local MODFLOW input files from a directory on the host that we'll call `/LOCALPATH`, and the docker-modflow instance will mount this as `/workspace` internally. The resulting output **.lst** file will be written to the shared `/LOCALPATH` directory.
 ```bash
-docker run --rm -v /LOCALPATH:/workspace mjstealey/docker-modflow mf2005 MYFILE.nam 
+docker run --rm --env-file sample-env-file.env -v /LOCALPATH:/workspace mjstealey/docker-modflow mf2005 MYFILE.nam 
 ```
+
+- Sample environment file `sample-env-file.env` (Update as required for your installation)
+  
+  ```
+  WORKER_UID=
+  WORKER_GID=
+  ```
+  **About UID/GID:** The docker container will operate as the **root** user if both the `WORKER_UID` and `WORKER_GID` variables are left blank. If these variables are defined, the container will operate a **worker** user with the specified UID and GID. If only one varialbe is set the container will operate as a **worker** user and default the unset UID or GID to a value of 999. This is useful when operating on a system where read/write permissions of a shared volume on the host need to be respected.
 
 **Example 1:** Say we want to run a set of input files where the name file is **bcf2ss.nam** and it's located within our local directory **/mydirectory**. 
 ```bash
@@ -33,7 +41,7 @@ bcf2ss.riv
 bcf2ss.wel
 ```
 
-We can invoke the call by mapping the shared volume as `-v /mydirectory:/workspace` and specify the execution of MODFLOW on our **bcf2ss.nam** as `mf2005 bcf2ss.nam` in the following way:
+We can invoke the call by mapping the shared volume as `-v /mydirectory:/workspace` and specify the execution of MODFLOW on our **bcf2ss.nam** as `mf2005 bcf2ss.nam` in the following way: (The container will operate as **root** since `WORKER_UID` and `WORKER_GID` were not specified, thus all output files will be owned by **root**)
 ```bash
 $ docker run --rm -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 bcf2ss.nam
 
@@ -67,7 +75,7 @@ bcf2ss.wel
 ```
 ---
 
-**Example 2:** Say we want to run a set of input files where the name file is **UZFtest2.nam** and it's located within our local directory **/mydirectory**. 
+**Example 2:** Say we want to run a set of input files where the name file is **UZFtest2.nam** and it's located within our local directory **/mydirectory**, and we want to enforce ownership of the output files to a local user with UID=1000 and GID=1000. 
 ```bash
 $ ls /mydirectory/ -1
 UZFtest2.ba6
@@ -82,9 +90,15 @@ UZFtest2.sip
 UZFtest2.uzf
 UZFtest2.wel
 ```
+Set `sample-env-file.env` as:
+```
+WORKER_UID=1000
+WORKER_GID=1000
+```
+
 We can invoke the call by mapping the shared volume as `-v /mydirectory:/workspace` and specify the execution of MODFLOW on our **UZFtest2.nam** as `mf2005 UZFtest2.nam` in the following way:
 ```bash
-$ docker run --rm -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 UZFtest2.nam
+$ docker run --rm --env-file sample-env-file.env -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 UZFtest2.nam
 
                                   MODFLOW-2005
     U.S. GEOLOGICAL SURVEY MODULAR FINITE-DIFFERENCE GROUND-WATER FLOW MODEL
@@ -265,7 +279,7 @@ $ docker run --rm -v /mydirectory:/workspace mjstealey/docker-modflow mf2005 UZF
   Normal termination of simulation
 ```
 
-Upon successful completion the user will now find the resultant output files in their local **/mydirectory**.
+Upon successful completion the user will now find the resultant output files in their local **/mydirectory** with the resultant output file onwership set to UID=1000 and GID=1000.
 ```bash
 $ ls /mydirectory/ -1
 UZFtest2.ba6
@@ -297,6 +311,16 @@ UZFtest2.uzf4   <-- Output file
 UZFtest2.uzfot  <-- Output file
 UZFtest2.wel
 ```
+Alternately environment variables can be passed into the docker run call as arguments instead of using an environment file. Using the same example UID=1000, GID=1000 we would make the docker run call like this:
+
+```
+$ docker run --rm \
+  -e WORKER_UID=1000 \
+  -e WORKER_GID=1000 \
+  -v /mydirectory:/workspace \
+  mjstealey/docker-modflow mf2005 UZFtest2.nam
+```
+
 ---
 **Validation of the model:**
 To test the validity of the model we will iterate over all **.nam** files found in the **test-run** directory If the container is run without any additional parameters. Samples of the expected output **.lst** files are found in the **test-out** directory and can be used for comparison as needed.
